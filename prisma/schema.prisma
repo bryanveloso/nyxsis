@@ -693,11 +693,11 @@ model ipbanlist {
   @@id([list, btime])
 }
 
-model login {
+model Login {
   account_id             Int       @id @default(autoincrement()) @db.UnsignedInt
   userid                 String    @default("") @db.VarChar(23)
   user_pass              String    @default("") @db.VarChar(32)
-  sex                    login_sex @default(M)
+  sex                    login_sex @default(MALE)
   email                  String    @default("") @db.VarChar(39)
   group_id               Int       @default(0) @db.TinyInt
   state                  Int       @default(0) @db.UnsignedInt
@@ -716,6 +716,7 @@ model login {
   web_auth_token_enabled Int       @default(0) @db.TinyInt
 
   @@index([userid], map: "name")
+  @@map("login")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -1060,9 +1061,9 @@ model zenylog {
 }
 
 enum quest_state {
-  0 @map("0")
-  1 @map("1")
-  2 @map("2")
+  UNSTARTED @map("0")
+  STARTED   @map("1")
+  COMPLETED @map("2")
 }
 
 enum chatlog_type {
@@ -1134,9 +1135,9 @@ enum picklog_type {
 }
 
 enum login_sex {
-  M
-  F
-  S
+  MALE   @map("M")
+  FEAMLE @map("F")
+  SERVER @map("S")
 }
 
 enum zenylog_type {
@@ -1172,6 +1173,6 @@ enum feedinglog_type {
 }
 
 enum char_sex {
-  M
-  F
+  MALE   @map("M")
+  FEMALE @map("F")
 }
