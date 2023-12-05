@@ -1,7 +1,9 @@
 import { prisma } from '@/db';
 import { NextResponse } from "next/server"
+import { useRouter } from "next/navigation"
 
 export async function POST(req: Request) {
+  const router = useRouter()
   const { email, password, username, gender } = await req.json()
 
   try {
@@ -15,7 +17,7 @@ export async function POST(req: Request) {
       },
     })
 
-    return NextResponse.json({})
+    return router.replace("/register/success")
   } catch (err: any) {
     console.log(err.message)
     return NextResponse.json({ message: err.message }, { status: 500 })

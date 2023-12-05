@@ -1,5 +1,6 @@
 "use client"
 
+import crypto from "crypto"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Image from "next/image"
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -48,13 +49,17 @@ export default function () {
   const { isDirty, isValid } = form.formState
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-
     try {
+      // Yes, this is a terrible way to do this.
+      // But it's 2002, so we're going to do it anyway.
+      const password: string = crypto
+        .createHash("md5")
+        .update(values.password)
+        .digest("hex")
       const response = await fetch("/api/register", {
         body: JSON.stringify({
           email: values.email,
-          password: values.password,
+          password,
           username: values.username,
           gender: values.gender,
         }),
