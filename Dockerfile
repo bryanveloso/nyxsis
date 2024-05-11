@@ -18,8 +18,9 @@ ENV NODE_ENV production
 RUN bun run build
 
 FROM base as release
-COPY --from=prerelase /app/.next/standalone ./
-COPY --from=prerelease /app/.next/static ./.next/static
+COPY --from=prerelease /usr/src/app/public ./public
+COPY --from=prerelease /usr/src/app/.next/standalone ./
+COPY --from=prerelease /usr/src/app/.next/static ./.next/static
 
 EXPOSE 3000
 ENV PORT 3000
