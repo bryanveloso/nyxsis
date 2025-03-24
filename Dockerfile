@@ -18,11 +18,22 @@ ENV NODE_ENV production
 RUN bun run build
 
 FROM base as release
+
+RUN apt-get update && apt-get install -y curl && \
+  curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb && \
+  dpkg -i cloudflared.deb && \
+  rm cloudflared.deb && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
 COPY --from=prerelease /usr/src/app/public ./public
 COPY --from=prerelease /usr/src/app/.next/standalone ./
 COPY --from=prerelease /usr/src/app/.next/static ./.next/static
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 3000
 ENV PORT 3000
 
-CMD HOSTNAME="0.0.0.0" bun run server.js
+ENTRYPOINT ["/entrypoint.sh"]

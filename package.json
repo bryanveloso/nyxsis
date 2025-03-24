@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:with-db": "bash ./dev-setup.sh && bun run dev && bash ./dev-cleanup.sh",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
